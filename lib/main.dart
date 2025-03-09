@@ -1,64 +1,146 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ShoeBoutiqueApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ShoeBoutiqueApp extends StatelessWidget {
+  const ShoeBoutiqueApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Counter App',
+      title: 'Jane’s Shoe Boutique',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
       ),
-      home: const CounterPage(),
+      home: const HomePage(),
     );
   }
 }
 
-class CounterPage extends StatefulWidget {
-  const CounterPage({super.key});
-
-  @override
-  State<CounterPage> createState() => _CounterPageState();
-}
-
-class _CounterPageState extends State<CounterPage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter App'),
+        title: const Text('Jane’s Shoe Boutique'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Welcome Section
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              color: Colors.pink[50],
+              child: const Text(
+                'Welcome to Jane’s Shoe Boutique!',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            // Featured Shoe Section
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Text(
+                        'Featured Shoe Image\n(Replace with real image)',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Handmade Leather Loafers',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    '\$49.99',
+                    style: TextStyle(fontSize: 18, color: Colors.green),
+                  ),
+                ],
+              ),
             ),
+            // Navigate to Catalog Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CatalogPage()),
+                  );
+                },
+                child: const Text('View All Shoes'),
+              ),
+            ),
+            // Contact Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Contact Jane at: jane@shoeboutique.com')),
+                  );
+                },
+                child: const Text('Contact Seller'),
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+}
+
+// New Catalog Page
+class CatalogPage extends StatelessWidget {
+  const CatalogPage({super.key});
+
+  // Sample shoe data (replace with real data later)
+  final List<Map<String, dynamic>> shoes = const [
+    {'name': 'Leather Loafers', 'price': '\$49.99'},
+    {'name': 'Suede Sneakers', 'price': '\$39.99'},
+    {'name': 'Canvas Flats', 'price': '\$29.99'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Shoe Catalog'),
+      ),
+      body: ListView.builder(
+        itemCount: shoes.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: ListTile(
+              leading: Container(
+                width: 50,
+                height: 50,
+                color: Colors.grey[300],
+                child: const Center(child: Text('Shoe Img')),
+              ),
+              title: Text(shoes[index]['name']),
+              subtitle: Text(shoes[index]['price'], style: const TextStyle(color: Colors.green)),
+            ),
+          );
+        },
       ),
     );
   }
